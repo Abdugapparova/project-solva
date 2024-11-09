@@ -1,0 +1,23 @@
+/* src/style.css */
+
+/* Custom styles to override or extend Bootstrap */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f5f5f5;
+}
+
+.custom-card {
+  border: 2px solid #8c9299;
+  border-radius: 10px;
+}
+
+.custom-btn {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.custom-btn:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+  
+}

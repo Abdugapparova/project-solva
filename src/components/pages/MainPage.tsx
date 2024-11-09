@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const MainPage: React.FC = () => {
@@ -23,13 +23,9 @@ const MainPage: React.FC = () => {
   if (loading) return <p>Загрузка...</p>;
 
   return (
-    <div>
-      <h1>Список персонажей</h1>
-      <ul>
-        {data.map((item, index) => (
-          <li key={index}>{item.name}</li>
-        ))}
-      </ul>
+    <div className="container mt-4">
+      <h1>Welcome to the SWAPI Explorer</h1>
+      <p>Select a category from the navigation menu to explore data from the Star Wars universe.</p>
     </div>
   );
 };
