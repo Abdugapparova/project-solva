@@ -4,85 +4,86 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import '../pages/css/people.css';
 
-
 const PersonDetails: React.FC = () => {
-    const { name } = useParams<{ name: string }>();
-    const navigate = useNavigate();
-    const [person, setPerson] = useState<any>(null);
-    const { register, handleSubmit, setValue } = useForm();
-  
-    // Fetch the person details
-    useEffect(() => {
-      const fetchPerson = async () => {
-        try {
-          const response = await axios.get(`https://swapi.dev/api/people/?search=${name}`);
-          setPerson(response.data.results[0]);
-          setValue('name', response.data.results[0].name);
-          setValue('height', response.data.results[0].height);
-          setValue('mass', response.data.results[0].mass);
-          setValue('gender', response.data.results[0].gender);
-        } catch (error) {
-          console.error('Error fetching person details:', error);
-        }
-      };
-  
-      fetchPerson();
-    }, [name, setValue]);
-  
-    // Handle form submission
-    const onSubmit = (data: any) => {
-      // Save the updated data in local state (could be passed to a context or Redux state)
-      console.log('Updated person data:', data);
-  
-      // Here we are passing the updated person data as state while navigating back to the list
-      navigate('/people', { state: { updatedPerson: data } });
-    };
-  
-    if (!person) return <p>Loading...</p>;
-  
-    return (
-      <div>
-        <h2>{person.name}</h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label>Name</label>
-            <input
-              {...register('name')}
-              placeholder="Name"
-              defaultValue={person.name}
-              disabled
-            />
-          </div>
-          <div>
-            <label>Height</label>
-            <input {...register('height')} placeholder="Height" defaultValue={person.height} />
-          </div>
-          <div>
-            <label>Mass</label>
-            <input {...register('mass')} placeholder="Mass" defaultValue={person.mass} />
-          </div>
-          <div>
-            <label>Gender</label>
-            <select {...register('gender')} defaultValue={person.gender}>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="unknown">Unknown</option>
-            </select>
-          </div>
-                <button type="submit" className="btn-save-changes">
-                    Save Changes
-                </button>
+  const { name } = useParams<{ name: string }>();
+  const navigate = useNavigate();
+  const [person, setPerson] = useState<any>(null);
+  const { register, handleSubmit, setValue } = useForm();
 
-        </form>
-  
+  useEffect(() => {
+    const fetchPerson = async () => {
+      try {
+        const response = await axios.get(`https://swapi.dev/api/people/?search=${name}`);
+        setPerson(response.data.results[0]);
+        setValue('name', response.data.results[0].name);
+        setValue('height', response.data.results[0].height);
+        setValue('mass', response.data.results[0].mass);
+        setValue('gender', response.data.results[0].gender);
+      } catch (error) {
+        console.error('Error fetching person details:', error);
+      }
+    };
+
+    fetchPerson();
+  }, [name, setValue]);
+
+  const onSubmit = (data: any) => {
+    console.log('Updated person data:', data);
+    navigate('/people', { state: { updatedPerson: data } });
+  };
+
+  if (!person) return <p>Loading...</p>;
+
+  return (
+    <div className="person-details-container">
+      <h2>{person.name}</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="person-form">
+        <div className="form-group">
+          <label>Name</label>
+          <input
+            {...register('name')}
+            className="form-control"
+            disabled
+          />
+        </div>
+        <div className="form-group">
+          <label>Height</label>
+          <input
+            {...register('height')}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label>Mass</label>
+          <input
+            {...register('mass')}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label>Gender</label>
+          <select
+            {...register('gender')}
+            className="form-control"
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+        <button type="submit" className="btn-save-changes">
+          Save Changes
+        </button>
         <button
-          className="btn btn-secondary"
+          type="button"
+          className="btn-back"
           onClick={() => navigate('/people')}
         >
           Back to People List
         </button>
-      </div>
-    );
-  };
-  
-  export default PersonDetails;
+      </form>
+    </div>
+  );
+};
+
+export default PersonDetails;
